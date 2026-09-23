@@ -82,9 +82,3 @@ dependencies {
 repositories {
     mavenCentral()
 }
-
-// A transitive dep floats androidx.annotation:annotation-experimental up to
-// 1.4.1, which AGP 4.0's Jetifier cannot transform. It holds annotations only.
-configurations.all {
-    resolutionStrategy.force 'androidx.annotation:annotation-experimental:1.0.0'
-}
