@@ -101,7 +101,8 @@ jobs:
 
       - name: Install the NDK
         if: env.NDK_VERSION != ''
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$NDK_VERSION" > /dev/null
+        # sdkmanager needs JDK 17+, whatever JDK the app's Gradle runs on.
+        run: yes | JAVA_HOME="$JAVA_HOME_17_X64" "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$NDK_VERSION" | grep -v '^\[' || true; test -d "$ANDROID_HOME/ndk/$NDK_VERSION"
 
       - uses: gradle/actions/setup-gradle@v4
         if: steps.detect.outputs.wrapper_missing_version != ''
