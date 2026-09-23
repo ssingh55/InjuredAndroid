@@ -35,6 +35,9 @@ env:
   # Blank = latest stable. Pin for Dart-2-era modules (InjuredAndroid's
   # flutter_module declares sdk <3.0.0, which Dart 3 refuses).
   FLUTTER_VERSION: "2.10.5"
+  # Blank = none. "Free disk space" deletes the runner's NDKs, so apps with
+  # native code name the exact NDK their build asks for (InjuredAndroid).
+  NDK_VERSION: "21.0.6113669"
 
 permissions:
   contents: read
@@ -95,6 +98,10 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ inputs.javaVersion || env.JAVA_VERSION }}
+
+      - name: Install the NDK
+        if: env.NDK_VERSION != ''
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$NDK_VERSION" > /dev/null
 
       - uses: gradle/actions/setup-gradle@v4
         if: steps.detect.outputs.wrapper_missing_version != ''
